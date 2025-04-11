@@ -1,0 +1,42 @@
+
+kubectl create namespace matrix  创建空间
+部署删除
+
+kubectl apply -f        #加文件
+
+kubectl delete -f 
+
+kubectl delete -f synapse.yaml
+kubectl apply -f synapse.yaml
+
+kubectl delete -f ele.yaml
+kubectl apply -f ele.yaml
+
+kubectl get pods -n matrix
+kubectl get pods -n ele-hq
+
+查看所有与空间中的pod
+
+kubectl get pods --all-namespaces
+
+kubectl get pods -n matrix
+
+查看pod详细 日志
+
+kubectl describe pod <pod-name> -n <namespace>
+
+kubectl describe pod <> -n matrix
+kubectl describe pod <> -n ele-hq
+查看容器
+kubectl logs -n matrix synapse-bc74dc877-99fj9
+kubectl logs -f -n matrix
+kubectl logs -f -n ele-hq
+
+chown -R 999:999 /root/Matrix/Synapse
+chmod -R 700 /root/Matrix/Synapse
+
+chown 999:999 /root/Matrix/Synapse
+chmod 644 /root/Matrix/Synapse
+
+
+kubectl exec -it -n matrix synapse-db -- /bin/bash

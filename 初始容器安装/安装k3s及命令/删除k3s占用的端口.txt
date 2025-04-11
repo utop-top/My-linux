@@ -1,0 +1,60 @@
+
+删除traefik服务：
+
+
+kubectl delete svc traefik -n kube-system
+
+检查Pod是否清理：
+
+
+kubectl get pods -n kube-system
+
+
+
+
+
+1. 删除现有Traefik组件
+先清理kube-system里的Traefik服务和Deployment：
+bash
+
+kubectl delete svc traefik -n kube-system
+kubectl delete deployment traefik -n kube-system
+
+
+
+
+
+方法1：启动时禁用
+用--disable=traefik参数启动k3s：
+bash
+
+sudo systemctl stop k3s
+sudo k3s server --disable=traefik
+
+这会跳过Traefik的安装，留下干净的环境给你装其他控制器（比如Nginx）。
+
+方法2：事后删除
+如果已经装了，像之前那样删掉：
+bash
+
+kubectl delete svc traefik -n kube-system
+kubectl delete deployment traefik -n kube-system
+
+然后阻止重建：
+编辑/var/lib/rancher/k3s/server/manifests/traefik.yaml，加一行disabled: true：
+yaml
+
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  chart: traefik
+  disabled: true  # 加这行
+
+重启k3s：
+bash
+
+sudo systemctl restart k3s
+

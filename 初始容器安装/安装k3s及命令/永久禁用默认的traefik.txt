@@ -1,0 +1,28 @@
+永久禁用：
+编辑 k3s 的服务文件：
+
+sudo systemctl stop k3s
+sudo nano /etc/systemd/system/k3s.service
+
+在 ExecStart 行添加 --disable=traefik，例如：
+
+################换掉
+ExecStart=/usr/local/bin/k3s \
+    server \
+
+###############为：
+ExecStart=/usr/local/bin/k3s server --disable=traefik
+
+保存后重新加载并重启：
+
+sudo systemctl daemon-reload
+sudo systemctl start k3s
+
+验证禁用：
+检查 kube-system 命名空间中是否还有 Traefik 相关的 Pod：
+bash
+
+kubectl get pods -n kube-system -l app=traefik
+
+如果没有输出，说明成功禁用。
+

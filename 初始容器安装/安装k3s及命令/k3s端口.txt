@@ -1,0 +1,38 @@
+如果你坚持使用低端口（如 8800、4343、8080 或甚至 80），需要修改 K3s 的服务端口范围：
+
+sudo systemctl edit k3s
+
+添加以下内容（覆盖默认启动参数）：
+
+[Service]
+ExecStart=
+ExecStart=/usr/local/bin/k3s server --service-node-port-range=80-32767
+
+重启 K3s：
+bash
+
+sudo systemctl daemon-reload
+sudo systemctl restart k3s
+
+验证：
+
+sudo k3s kubectl get nodes
+
+重新应用配置：
+
+
+创建命名空间：
+
+sudo k3s kubectl create namespace matrix
+
+sudo k3s kubectl apply -f dpanel.yaml
+
+
+
+
+在 Kubernetes（包括 K3s）中，NodePort 类型的服务默认会将端口映射到宿主机的 30000-32767 范围内。
+
+你尝试将 nodePort 设置为 8800，但 K3s 未配置为允许低于 30000 的端口，因此报错。
+
+
+

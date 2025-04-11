@@ -1,0 +1,76 @@
+确保你的 Debian 系统已更新到最新版本：
+bash
+
+sudo apt update && sudo apt upgrade -y
+
+你需要 root 或 sudo 权限来执行安装。
+
+安装 K3s
+K3s 提供了便捷的安装脚本，可以通过以下步骤完成安装：
+下载并运行 K3s 安装脚本：
+使用 curl 下载官方安装脚本并直接执行：
+bash
+
+curl -sfL https://get.k3s.io | sh -
+
+这个命令会：
+下载 K3s 二进制文件。
+
+将其安装到 /usr/local/bin/k3s。
+
+配置并启动 K3s 服务。
+
+验证安装：
+安装完成后，检查 K3s 是否正常运行：
+bash
+
+sudo systemctl status k3s
+
+如果服务正在运行，你应该看到类似“active (running)”的状态。
+
+检查节点状态：
+K3s 默认以单节点模式运行，你可以用以下命令检查 Kubernetes 集群状态：
+bash
+
+sudo k3s kubectl get nodes
+
+输出中应该会显示你的节点名称，并且状态为 Ready。
+
+配置 K3s（可选）
+访问 kubectl：
+默认情况下，kubectl 被集成到 K3s 中。你可以直接使用 k3s kubectl 命令。如果想直接使用 kubectl，可以创建一个符号链接：
+bash
+
+sudo ln -s /usr/local/bin/k3s /usr/local/bin/kubectl
+
+然后测试：
+bash
+
+kubectl get nodes
+
+查看集群配置文件：
+K3s 的 kubeconfig 文件位于：
+
+/etc/rancher/k3s/k3s.yaml
+
+如果需要远程访问集群，可以将此文件复制到你的本地 ~/.kube/config（注意修改其中的 server 地址为你的服务器 IP）。
+
+停止或卸载 K3s（可选）
+停止 K3s 服务：
+bash
+
+sudo systemctl stop k3s
+
+卸载 K3s：
+如果需要完全移除 K3s，可以使用官方提供的卸载脚本：
+
+
+/usr/local/bin/k3s-uninstall.sh
+
+注意事项
+如果你的 Debian 系统启用了防火墙（如 ufw），需要开放 K3s 所需的端口（默认是 6443）。
+
+sudo ufw allow 6443/tcp
+
+如果你想部署多节点集群，可以在其他节点上运行 k3s agent 并加入主节点，具体参考官方文档。
+
