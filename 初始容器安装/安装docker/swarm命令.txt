@@ -1,0 +1,19 @@
+部署
+
+docker stack rm matrix #移除
+docker stack deploy -c synapse.yaml matrix
+
+日志
+
+docker stack ps matrix
+docker service ls
+docker service logs matrix_synapse
+docker service logs matrix_synapse-db
+
+
+
+docker network create -d overlay --scope swarm matrix_net
+
+docker network rm matrix_net
+
+docker network create matrix_net

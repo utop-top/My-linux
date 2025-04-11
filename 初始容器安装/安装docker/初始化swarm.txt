@@ -1,0 +1,27 @@
+docker swarm init  #初始化
+
+docker swarm leave --force 离开当前集群
+
+
+docker network create --driver overlay dendrite-swarm
+docker network create -d overlay matrix_net_swarm
+
+
+
+
+docker service ls
+docker service rm <service_name>
+
+docker stack deploy -c swarm_docker-compose.yaml synapse   #创建一个名为dendrite的堆栈
+
+
+docker stack rm synapse
+
+docker service logs -f
+docker service ps dendrite_monolith_db
+docker service ps dendrite_monolith
+docker service ps dendrite_redis
+
+docker service update --force dendrite_monolith
+
+sudo chown -R 991:991 /root/Matrix/synapse #给予组权限
