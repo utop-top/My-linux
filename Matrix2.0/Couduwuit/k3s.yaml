@@ -1,0 +1,93 @@
+---
+# Deployment 定义 conduwuit 的运行实例
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conduwuit
+  namespace: conduwuit  # 可改为自定义命名空间
+  labels:
+    app: conduwuit
+spec:
+  replicas: 1  # 单实例运行，可根据需要调整
+  selector:
+    matchLabels:
+      app: conduwuit
+  template:
+    metadata:
+      labels:
+        app: conduwuit
+    spec:
+      containers:
+      - name: conduwuit
+        image: ghcr.io/girlbossceo/conduwuit:main-haswell
+        imagePullPolicy: Always  # 确保拉取最新镜像
+        env:
+        - name: CONDUWUIT_SERVER_NAME
+          value: "con.aosn.de"  # EDIT THIS
+        - name: CONDUWUIT_DATABASE_PATH
+          value: "/var/lib/conduwuit"
+        - name: CONDUWUIT_PORT
+          value: "6167"
+        - name: CONDUWUIT_MAX_REQUEST_SIZE
+          value: "20000000"  # ~20 MB
+        - name: CONDUWUIT_ALLOW_REGISTRATION
+          value: "true"
+        - name: CONDUWUIT_REGISTRATION_TOKEN
+          value: "天王盖地虎"  # 注册令牌
+        - name: CONDUWUIT_ALLOW_FEDERATION
+          value: "true"
+        - name: CONDUWUIT_ALLOW_CHECK_FOR_UPDATES
+          value: "true"
+        - name: CONDUWUIT_TRUSTED_SERVERS
+          value: '["matrix.org"]'
+        - name: CONDUWUIT_ADDRESS
+          value: "0.0.0.0"
+        - name: CONDUWUIT_CONFIG
+          value: "/etc/conduwuit.toml"  # 配置文件路径
+        ports:
+        - containerPort: 6167  # conduwuit 主端口
+          name: http
+        - containerPort: 8446  # TLS 端口
+          name: https
+        volumeMounts:
+        - name: db-volume
+          mountPath: /var/lib/conduwuit
+        - name: config-volume
+          mountPath: /etc/conduwuit.toml
+        resources:
+          requests:
+            memory: "1024Mi"  # 最低内存需求，可调整
+            cpu: "1024m"      # 最低 CPU 需求，可调整
+          limits:
+            memory: "4Gi"    # 最大内存限制，可调整
+            cpu: "4"         # 最大 CPU 限制，可调整
+      volumes:
+      - name: db-volume
+        hostPath:
+          path: /root/Matrix/Conduwuit/conduwuit_db  # 在宿主机上的数据库目录，需调整
+          type: DirectoryOrCreate
+      - name: config-volume
+        hostPath:
+          path: /root/Matrix/Conduwuit/conduwuit.toml
+          type: File
+
+---
+# Service 定义 conduwuit 的网络访问
+apiVersion: v1
+kind: Service
+metadata:
+  name: conduwuit-service
+  namespace: conduwuit  # 可改为自定义命名空间
+spec:
+  selector:
+    app: conduwuit
+  ports:
+  - name: http
+    port: 6167
+    targetPort: 6167
+    nodePort: 30067
+  - name: https
+    port: 8446
+    targetPort: 8446
+    protocol: TCP
+  type: NodePort
