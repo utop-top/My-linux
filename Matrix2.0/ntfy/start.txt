@@ -1,0 +1,12 @@
+docker exec -it ntfy ntfy user add --role=admin ntfy    #设置管理员用户 adminntfuy
+# 创建一个管理员角色，username请自行设置ntfy
+docker exec -it ntfy ntfy user add --role=admin username
+# 创建一个普通用户
+docker exec -it ntfy ntfy user add --role=user username
+# 修改用户权限，权限可以是read-write、read-only、write-only或deny
+docker exec -it ntfy ntfy access 用户名 主题 权限
+# 查看访问控制列表（ACL）
+docker exec -it ntfy ntfy access
+
+
+docker exec -it ntfy ntfy user add --role=admin ntfy

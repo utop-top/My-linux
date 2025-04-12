@@ -1,0 +1,26 @@
+version: '3'
+services:
+  ntfy:
+    image: binwiederhier/ntfy
+    container_name: ntfy
+    restart: unless-stopped
+    volumes:
+      - ./ntfy:/var/lib/ntfy
+    environment:
+      NTFY_BASE_URL: https://ntfy.example.com	
+      NTFY_CACHE_FILE: /var/lib/ntfy/cache.db
+      NTFY_AUTH_FILE: /var/lib/ntfy/auth.db
+      NTFY_AUTH_DEFAULT_ACCESS: read-write	
+      NTFY_BEHIND_PROXY: true
+      NTFY_ATTACHMENT_CACHE_DIR: /var/lib/ntfy/attachments
+      NTFY_ENABLE_LOGIN: true
+    user: root
+    ports:
+      - 7778:80
+    command: serve
+    networks:
+      - matrix_net
+
+networks:
+  matrix_net:
+    external: true

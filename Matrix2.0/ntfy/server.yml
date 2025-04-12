@@ -1,0 +1,5 @@
+base-url: "https://ntfy.example.com"
+cache-file: "/var/cache/ntfy/cache.db"
+attachment-cache-dir: "/var/cache/ntfy/attachments"
+web-root: disable
+
