@@ -1,0 +1,19 @@
+docker login   登录id
+docker login 仓库地址
+docker login myregistry.example.com
+
+cat ~/.docker/config.json验证登录状态
+
+1：
+docker images  查看镜像
+2：标记
+                     版本 ：                       版本：
+docker tag conduwuit:latest 你的用户名/conduwuit:latest
+
+docker tag conduwuit:latest utoptop/conduwuit:latest
+
+3:
+推送镜像
+docker push 你的用户名/conduwuit:latest
+
+docker push utoptop/conduwuit:latest
