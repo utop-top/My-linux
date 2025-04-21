@@ -1,0 +1,20 @@
+version: '3.3'
+services:
+  alist:
+    image: 'xhofe/alist:latest'
+    container_name: alist
+    volumes:
+      - ./alist:/opt/alist/data
+      - ./My-volume:/etc/alist
+    ports:
+      - '5244:5244'
+    environment:
+      - PUID=0
+      - PGID=0
+      - UMASK=022
+    restart: unless-stopped
+    networks:
+      - my_network
+networks:
+  my_network:
+    external: true

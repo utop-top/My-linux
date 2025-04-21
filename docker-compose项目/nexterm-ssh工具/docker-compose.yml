@@ -1,0 +1,8 @@
+services:
+  nexterm:
+    ports:
+      - "6989:6989" # 左边的3000可以改成服务器上没有用过的端口
+    restart: unless-stopped    # no,always,on-failure,unless-stopped
+    volumes:
+      - ./nexterm:/app/data
+    image: germannewsmaker/nexterm:latest

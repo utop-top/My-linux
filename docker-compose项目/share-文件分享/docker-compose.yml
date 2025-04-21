@@ -1,0 +1,8 @@
+services:
+  enclosed:
+    image: corentinth/enclosed
+    ports:
+      - 3120:8787    
+    volumes:
+      - ./enclosed-data:/app/.data
+    restart: unless-stopped
