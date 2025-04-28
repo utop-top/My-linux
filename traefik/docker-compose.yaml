@@ -1,0 +1,19 @@
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    network_mode: "host"
+    ports:
+      - "7000:7000"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./dynamic.yml:/etc/traefik/dynamic.yml  # 挂载动态配置文件
+      - ./letsencrypt:/letsencrypt
+#    networks:
+#      - matrix_net
+#networks:
+#  matrix_net:
+#    external: true

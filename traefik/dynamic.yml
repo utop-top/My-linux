@@ -1,0 +1,94 @@
+http:
+  routers:
+    dashboard:
+      rule: "Host(`traefik.aosn.de`)"
+      service: "api@internal"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "myresolver"
+      middlewares:
+        - "auth"
+    dp:
+      rule: "Host(`dp.aosn.de`)"
+      service: "dp-service"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "myresolver"
+
+    matrix:
+      rule: "Host(`aosn.de`)"
+      service: "nginx-service"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "myresolver"
+    auth:
+      rule: "Host(`auth.aosn.de`)"
+      service: "nginx-service"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "myresolver"
+    element-web:
+      rule: "Host(`app.aosn.de`)"
+      service: "nginx-service"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "myresolver"
+    element-call:
+      rule: "Host(`call.aosn.de`)"
+      service: "nginx-service"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "myresolver"
+    jwt:
+      rule: "Host(`jwt.aosn.de`)"
+      service: "nginx-service"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "myresolver"
+
+    livekit:
+      rule: "Host(`livekit.aosn.de`)"
+      service: "nginx-service"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "myresolver"
+
+
+
+    alist:
+      rule: "Host(`alist3.aosn.de`)"
+      service: "alist-service"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "myresolver"
+
+  services:
+    nginx-service:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:30087"  # Nginx 的内部地址和端口
+
+    dp-service:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:3888"
+    alist-service:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:5244" 
+
+  middlewares:
+    auth:
+      basicAuth:
+        users:
+          - "admin:$apr1$j4a/ySnr$YebvBPFvRtXwtsXSqcZ7W1"  # 用户名:admin 密码:traefik
+

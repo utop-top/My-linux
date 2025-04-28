@@ -1,0 +1,28 @@
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+log:
+  level: DEBUG
+
+entryPoints:
+  websecure:
+    address: ":443"
+
+providers:
+  docker:
+    exposedByDefault: false
+  file:
+    filename: "/etc/traefik/dynamic.yml"
+    watch: true
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: "looksend@outlook.com"
+      storage: "/letsencrypt/acme.json"
+      tlsChallenge: {}
+
+api:
+#  insecure: true  # 仅用于测试，允许不安全的 HTTP 访问
+  dashboard: true  # 启用仪表盘
