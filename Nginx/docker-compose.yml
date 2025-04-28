@@ -1,0 +1,16 @@
+services:
+  nginx-host:
+    image: nginx
+    container_name: nginx-host
+    restart: always
+    network_mode: "host"
+    ports:
+#      - "8777:8077"
+      - "443:443"
+    volumes:
+      - ./config:/etc/nginx
+      - ./other:/etc/nginx/other
+      - ./sync_cache:/var/cache/nginx/sync_cache
+      - /root/Certs/Certbot:/etc/nginx/ssl
+
+
