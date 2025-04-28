@@ -5,7 +5,7 @@ services:
     container_name: alist
     volumes:
       - ./alist:/opt/alist/data
-      - ./My-volume:/etc/alist
+      - /root/cloud:/etc/alist/cloud
     ports:
       - '5244:5244'
     environment:
